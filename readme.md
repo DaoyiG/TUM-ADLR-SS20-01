@@ -3,7 +3,7 @@
 Description of the project should replace this later.
 
 ## Members:
-Daoyi Gao
+Daoyi Gao\
 Yang Zhang
 
 ## Information
