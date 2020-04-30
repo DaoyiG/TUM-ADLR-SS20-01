@@ -1,4 +1,4 @@
-# Advanced Deep Learning for Robotics Project
+# Advanced Deep Learning for Robotics Project SS2020
 
 Description of the project should replace this later.
 
