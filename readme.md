@@ -17,5 +17,8 @@ On the website they give Demo-videos and link to their implementation code.
 This blog is a comment of OpenAI's original [Solving Rubik’s Cube with a Robot Hand](https://openai.com/blog/solving-rubiks-cube/). \
 Our idea list also included this paper from OpenAI(idea 3: Investigate Reinforcement Learning with Augmented Networks).
 
+[Behaviour Suite for Reinforcement Learning](https://github.com/deepmind/bsuite)\
+This is the code base of DeepMind's bsuite. Bsuite is publicated in ICLR2020. 
+
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
