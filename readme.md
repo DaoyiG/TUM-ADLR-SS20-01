@@ -20,5 +20,17 @@ Our idea list also included this paper from OpenAI(idea 3: Investigate Reinforce
 [Behaviour Suite for Reinforcement Learning](https://github.com/deepmind/bsuite)\
 This is the code base of DeepMind's bsuite. Bsuite is publicated in ICLR2020. 
 
+[Awesome-Meta-Learning](https://github.com/sudharsan13296/Awesome-Meta-Learning)\
+Git repo collect all relavent papers, codes etc.
+
+[meta-reinforcement-learning](https://github.com/fhennecker/meta-reinforcement-learning)\
+Somebody's Masterthesis. The code is quite straightforward.
+
+[Tensorflow implementation of Meta-RL A3C algorithm](https://github.com/awjuliani/Meta-RL)\
+Again somebody's implementation, also quite straightforward. Written in Jupyter Notebook.
+
+[Reinforcement Learning with Model-Agnostic Meta-Learning (MAML)](https://github.com/tristandeleu/pytorch-maml-rl)\
+Implementation of Model-Agnostic Meta-Learning (MAML) applied on Reinforcement Learning problems in Pytorch. 
+
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
