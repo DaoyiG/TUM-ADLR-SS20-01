@@ -33,7 +33,13 @@ Again somebody's implementation, also quite straightforward. Written in Jupyter 
 Implementation of Model-Agnostic Meta-Learning (MAML) applied on Reinforcement Learning problems in Pytorch. 
 
 [Implementation of Efficient Off-policy Meta-learning via Probabilistic Context Variables (PEARL)](https://github.com/katerakelly/oyster)\
-Online probabilistic filtering of latent task variables to infer how to solve a new task from small amounts of experience
+Online probabilistic filtering of latent task variables to infer how to solve a new task from small amounts of experience  
+
+[ProMP: Proximal Meta-Policy Search](https://github.com/jonasrothfuss/ProMP)\
+credit assignment in gradient-based Meta-RL  
+
+[Meta-Reinforcement Learning of Structured Exploration Strategies](https://github.com/russellmendonca/maesn_suite)\
+Gradientbased fast adaptation algorithm – model agnostic exploration with structured noise (MAESN)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
