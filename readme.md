@@ -1,6 +1,6 @@
 # Advanced Deep Learning for Robotics Project SS2020
 
-Description of the project should replace this later.
+Meta-Reinforcement Learning using non mutually exclusive task environments.
 
 ## Members:
 Daoyi Gao\
@@ -10,6 +10,9 @@ Yang Zhang
 All datas relavant to this project should be in this repo. Like literatures, codes, test results.
 
 ## Some online stuff
+[OpenAI Spinning Up](https://spinningup.openai.com/en/latest/index.html)\
+Useful tutorial for DRL. explained theory alone with code implementation written in Python using Pytorch as dependency.
+
 [Meta-Learning for Model-Based Control ](https://sites.google.com/berkeley.edu/metaadaptivecontrol)\
 On the website they give Demo-videos and link to their implementation code.
 
