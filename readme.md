@@ -63,6 +63,9 @@ credit assignment in gradient-based Meta-RL
 [Meta-Learning without Memorization](https://github.com/google-research/google-research/tree/master/meta_learning_without_memorization)\
 This is a fresh new paper from ICLR 2020. The author proposed a regularization technique for MAML. After applied this, one can train model using **non-mutually-exclusive tasks**. It would be a big success ***if we can convert this in MAML-RL algorithm*** and test it in RL background.
 
+[Soft Actor-Critic](https://github.com/rail-berkeley/softlearning)\
+This is the original version of SAC implemented in TF. The Pytorch version of SAC is in rlkit.  
+
 [MAML implementations1 in Pytorch](https://github.com/dragen1860/MAML-Pytorch)\
 [MAML implementations2 in Pytorch](https://github.com/katerakelly/pytorch-maml)\
 [MAML implementations3 in TF(original MAML in supervised domain](https://github.com/cbfinn/maml)\
