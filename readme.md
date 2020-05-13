@@ -20,6 +20,12 @@ A framework for developing and evaluating reinforcement learning algorithms, ful
 Garage is a toolkit for developing and evaluating reinforcement learning algorithms, and an accompanying library of state-of-the-art implementations built using that toolkit.  
 Contains: MAML, PERAL, etc.
 
+[RLkit](https://github.com/vitchyr/rlkit)\
+Reinforcement learning framework and algorithms implemented in PyTorch.  
+
+[Viskit](https://github.com/vitchyr/viskit)\
+rllab's viskit with some added features( visualizing learning kurve)  
+
 [Awesome-Meta-Learning](https://github.com/sudharsan13296/Awesome-Meta-Learning)\
 Git repo collect all relavent papers, codes etc.  
 
@@ -60,7 +66,7 @@ This is a fresh new paper from ICLR 2020. The author proposed a regularization t
 [MAML implementations1 in Pytorch](https://github.com/dragen1860/MAML-Pytorch)\
 [MAML implementations2 in Pytorch](https://github.com/katerakelly/pytorch-maml)\
 [MAML implementations3 in TF(original MAML in supervised domain](https://github.com/cbfinn/maml)\
-[MAML implementations4 in TF(original MAML in RL domain)](https://github.com/cbfinn/maml_rl)\
+[MAML implementations4 in TF(original MAML in RL domain)](https://github.com/cbfinn/maml_rl)\  
 
 
 ## License
