@@ -141,16 +141,18 @@ ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib/nvidia-000
 
 
 # ========== Conda Environment ==========
+RUN conda config --set restore_free_channel true
+
 COPY ./environment.yml /tmp/environment.yml
 
 # NOTE: Don't separate the Mujoco key echo and remove commands into separate
 # run commands! Otherwise your key will be readable by anyone who has access
 # To the container. We need the key in order to compile mujoco_py.
 # TODO this is not good but it can't find the key otherwise
-#RUN echo "${MJKEY}" > ./mjkey.txt 
+#RUN echo "${MJKEY}" > ./mjkey.txt
 COPY ./mjkey.txt /root/.mujoco/
 RUN conda env update -f /tmp/environment.yml \
-    && conda clean --all -y 
+    && conda clean --all -y
 
 RUN mkdir /root/code
 WORKDIR /root/code
@@ -160,4 +162,3 @@ ENV PYTHONPATH="rand_param_envs:$PYTHONPATH"
 RUN echo "source activate pearl" >> /root/.bashrc \
     && echo "cd /root/code" >> /root/.bashrc
 ENV PATH /opt/conda/envs/pearl/bin:$PATH
-
