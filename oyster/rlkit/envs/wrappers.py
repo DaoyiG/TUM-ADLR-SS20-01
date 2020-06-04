@@ -1,7 +1,7 @@
 import numpy as np
 from gym import Env
 from gym.spaces import Box
-import mujoco_py
+#import mujoco_py
 
 from rlkit.core.serializable import Serializable
 
