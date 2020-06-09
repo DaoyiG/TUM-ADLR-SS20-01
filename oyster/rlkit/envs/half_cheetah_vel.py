@@ -30,6 +30,9 @@ class HalfCheetahVelEnv(HalfCheetahEnv):
         self._goal = self._goal_vel
         super(HalfCheetahVelEnv, self).__init__()
 
+    # TODO: step function with reward
+    # TODO: write _get_obs to get observations
+
 
     def sample_tasks(self, num_tasks):
         np.random.seed(1337)

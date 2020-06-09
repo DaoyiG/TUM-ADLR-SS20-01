@@ -4,8 +4,4 @@ from pybulletgym.envs.roboschool.envs.locomotion.half_cheetah_env import HalfChe
 
 class HalfCheetahEnv(HalfCheetahEnv_):
     def __init__(self):
-        supe
-
-
-
-
+        pass
