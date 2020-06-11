@@ -1,5 +1,4 @@
 #!/bin/bash
 
-export PYTHONPATH=./rand_param_envs:$PYTHONPATH
-
-python launch_experiment.py ./configs/cheetah_vel.json
+python launch_experiment.py ./configs/cheetah-vel.json
+sudo shutdown -h now
