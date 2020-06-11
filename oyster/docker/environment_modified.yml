@@ -140,12 +140,9 @@ dependencies:
     - tables==3.4.4
     - terminado==0.8.1
     - testpath==0.4.2
-    - torch==1.0.1
-    - torchvision==0.2.2
     - tornado==5.1.1
     - tqdm==4.31.1
     - urllib3==1.24.1
     - webencodings==0.5.1
     - widgetsnbextension==3.4.2
-
-
+prefix: /home/seraph/anaconda3/envs/pearl

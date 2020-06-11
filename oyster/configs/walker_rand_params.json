@@ -18,6 +18,6 @@
         "num_steps_per_eval": 600,
         "num_exp_traj_eval": 2,
         "embedding_batch_size": 100,
-        "embedding_mini_batch_size": 100 
+        "embedding_mini_batch_size": 100
     }
 }

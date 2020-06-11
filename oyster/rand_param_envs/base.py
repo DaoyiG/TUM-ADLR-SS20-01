@@ -1,5 +1,4 @@
 from rand_param_envs.gym.core import Env
-from rand_param_envs.gym.envs.mujoco import MujocoEnv
 import numpy as np
 
 
@@ -47,7 +46,8 @@ class MetaEnv(Env):
         """
         pass
 
-class RandomEnv(MetaEnv, MujocoEnv):
+
+class RandomEnv(MetaEnv):
     """
     This class provides functionality for randomizing the physical parameters of a mujoco model
     The following parameters are changed:
@@ -59,10 +59,10 @@ class RandomEnv(MetaEnv, MujocoEnv):
     RAND_PARAMS_EXTENDED = RAND_PARAMS + ['geom_size']
 
     def __init__(self, log_scale_limit, file_name, *args, rand_params=RAND_PARAMS, **kwargs):
-        MujocoEnv.__init__(self, file_name, 4)
+        MetaEnv.__init__(self)
         assert set(rand_params) <= set(self.RAND_PARAMS_EXTENDED), \
             "rand_params must be a subset of " + str(self.RAND_PARAMS_EXTENDED)
-        self.log_scale_limit = log_scale_limit            
+        self.log_scale_limit = log_scale_limit
         self.rand_params = rand_params
         self.save_parameters()
 
@@ -84,22 +84,29 @@ class RandomEnv(MetaEnv, MujocoEnv):
             new_params = {}
 
             if 'body_mass' in self.rand_params:
-                body_mass_multiplyers = np.array(1.5) ** np.random.uniform(-self.log_scale_limit, self.log_scale_limit,  size=self.model.body_mass.shape)
+                body_mass_multiplyers = np.array(1.5) ** np.random.uniform(-self.log_scale_limit, self.log_scale_limit,
+                                                                           size=self.model.body_mass.shape)
                 new_params['body_mass'] = self.init_params['body_mass'] * body_mass_multiplyers
 
             # body_inertia
             if 'body_inertia' in self.rand_params:
-                body_inertia_multiplyers = np.array(1.5) ** np.random.uniform(-self.log_scale_limit, self.log_scale_limit,  size=self.model.body_inertia.shape)
+                body_inertia_multiplyers = np.array(1.5) ** np.random.uniform(-self.log_scale_limit,
+                                                                              self.log_scale_limit,
+                                                                              size=self.model.body_inertia.shape)
                 new_params['body_inertia'] = body_inertia_multiplyers * self.init_params['body_inertia']
 
             # damping -> different multiplier for different dofs/joints
             if 'dof_damping' in self.rand_params:
-                dof_damping_multipliers = np.array(1.3) ** np.random.uniform(-self.log_scale_limit, self.log_scale_limit, size=self.model.dof_damping.shape)
+                dof_damping_multipliers = np.array(1.3) ** np.random.uniform(-self.log_scale_limit,
+                                                                             self.log_scale_limit,
+                                                                             size=self.model.dof_damping.shape)
                 new_params['dof_damping'] = np.multiply(self.init_params['dof_damping'], dof_damping_multipliers)
 
             # friction at the body components
             if 'geom_friction' in self.rand_params:
-                dof_damping_multipliers = np.array(1.5) ** np.random.uniform(-self.log_scale_limit, self.log_scale_limit, size=self.model.geom_friction.shape)
+                dof_damping_multipliers = np.array(1.5) ** np.random.uniform(-self.log_scale_limit,
+                                                                             self.log_scale_limit,
+                                                                             size=self.model.geom_friction.shape)
                 new_params['geom_friction'] = np.multiply(self.init_params['geom_friction'], dof_damping_multipliers)
 
             param_sets.append(new_params)
