@@ -51,7 +51,7 @@ class AntGoalEnv(MultitaskAntEnv):
         reward = goal_reward - ctrl_cost - contact_cost + survive_reward
 
         done = False
-
+        # TODO: may have problem here, the original pearl use ob = self._get_obs(), but now the dim is not match
         return observation, reward, done, dict(
             goal_forward=goal_reward,
             reward_ctrl=-ctrl_cost,
