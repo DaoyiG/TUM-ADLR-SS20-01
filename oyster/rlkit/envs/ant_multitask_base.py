@@ -28,13 +28,6 @@ class MultitaskAntEnv(AntEnv):
                      reward_ctrl=-ctrl_cost, task=self._task)
         return (observation, reward, done, infos)
     """
-    def sample_tasks(self, num_tasks):
-        a = np.random.random(num_tasks) * 2 * np.pi
-        r = 3 * np.random.random(num_tasks) ** 0.5
-        goals = np.stack((r * np.cos(a), r * np.sin(a)), axis=-1)
-        tasks = [{'goal': goal} for goal in goals]
-        return tasks
-
     def get_all_task_idx(self):
         return range(len(self.tasks))
 

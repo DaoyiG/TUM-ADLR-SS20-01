@@ -62,12 +62,12 @@ class AntGoalEnv(MultitaskAntEnv):
         # return (observation, reward, done, infos)
 
     # moved to the multiclass base
-    # def sample_tasks(self, num_tasks):
-    #     a = np.random.random(num_tasks) * 2 * np.pi
-    #     r = 3 * np.random.random(num_tasks) ** 0.5
-    #     goals = np.stack((r * np.cos(a), r * np.sin(a)), axis=-1)
-    #     tasks = [{'goal': goal} for goal in goals]
-    #     return tasks
+    def sample_tasks(self, num_tasks):
+        a = np.random.random(num_tasks) * 2 * np.pi
+        r = 3 * np.random.random(num_tasks) ** 0.5
+        goals = np.stack((r * np.cos(a), r * np.sin(a)), axis=-1)
+        tasks = [{'goal': goal} for goal in goals]
+        return tasks
 
     # from original pearl
     # def _get_obs(self):
