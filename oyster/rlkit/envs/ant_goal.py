@@ -50,7 +50,7 @@ class AntGoalEnv(MultitaskAntEnv):
         #     np.square(np.clip(self.sim.data.cfrc_ext, -1, 1)))
 
         contact_cost = 0.0
-        survive_reward = 0.5
+        survive_reward = 0.0
         reward = goal_reward - ctrl_cost - contact_cost + survive_reward
 
         done = False

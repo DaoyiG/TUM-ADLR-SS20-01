@@ -35,3 +35,7 @@ class MultitaskAntEnv(AntEnv):
         self._task = self.tasks[idx]
         self._goal = self._task['goal'] # assume parameterization of task by single vector
         self.reset()
+
+    def reset_model(self):
+        qpos = [0,0,0.45] + self.np_random.uniform(size=3, low=-.1, high=.1)
+        self.robot.robot_body.reset_position(qpos)
