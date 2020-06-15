@@ -9,6 +9,7 @@ from . import register_env
 class AntGoalEnv(MultitaskAntEnv):
     def __init__(self, task={}, n_tasks=2, randomize_tasks=True, **kwargs):
         super(AntGoalEnv, self).__init__(task, n_tasks, **kwargs)
+
     """
     # original pearl
     # def step(self, action):
@@ -32,22 +33,24 @@ class AntGoalEnv(MultitaskAntEnv):
     #         reward_survive=survive_reward,
     #     )
     """
-    def step(self, action):
 
+    def step(self, action):
         # Use original step function
         observation, reward, done, _ = super(AntGoalEnv, self).step(action)
 
         xposafter = self._get_obs()
 
-        goal_reward = -np.sum(np.abs(xposafter[:2] - self._goal)) # make it happy, not suicidal
+        goal_reward = -np.sum(np.abs(xposafter[:2] - self._goal))  # make it happy, not suicidal
 
-        ctrl_cost = .1 * np.square(action).sum()
+        # ctrl_cost = .1 * np.square(action).sum()
+        ctrl_cost = 0.0
+
         # TODO: need to find how to get this external force in here and _get_obs()
         # contact_cost = 0.5 * 1e-3 * np.sum(
         #     np.square(np.clip(self.sim.data.cfrc_ext, -1, 1)))
 
         contact_cost = 0.0
-        survive_reward = 0.1
+        survive_reward = 0.5
         reward = goal_reward - ctrl_cost - contact_cost + survive_reward
 
         done = False
@@ -77,7 +80,6 @@ class AntGoalEnv(MultitaskAntEnv):
     #         np.clip(self.sim.data.cfrc_ext, -1, 1).flat,
     #     ])
     def _get_obs(self):
-
         return np.concatenate([
             self.robot.robot_body.pose().xyz(),
             self.robot.robot_body.speed(),
