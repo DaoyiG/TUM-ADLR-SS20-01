@@ -7,8 +7,9 @@ from . import register_env
 @register_env('ant-dir')
 class AntDirEnv(MultitaskAntEnv):
 
-    def __init__(self, task={}, n_tasks=2, forward_backward=False, randomize_tasks=True, **kwargs):
+    def __init__(self, task={}, n_tasks=2, forward_backward=False, randomize_tasks=True, observation_noise=0, **kwargs):
         self.forward_backward = forward_backward
+        self._observation_noise = observation_noise
         super(AntDirEnv, self).__init__(task, n_tasks, **kwargs)
 
     def step(self, action):
@@ -18,6 +19,11 @@ class AntDirEnv(MultitaskAntEnv):
 
         # self.do_simulation(action, self.frame_skip)
         observation, reward, done, _ = super(AntDirEnv, self).step(action)
+
+        if self._observation_noise > 1e-8:
+            noise = self._observation_noise * np.random.randn(self.observation_space.shape[0])
+            observation += noise
+            
         # torso_xyz_after = np.array(self.get_body_com("torso"))
         torso_xyz_after = self._get_obs()
 
