@@ -17,7 +17,7 @@ from rlkit.torch.sac.policies import MakeDeterministic
 from rlkit.samplers.util import rollout
 
 
-def sim_policy(variant, path_to_exp, num_trajs=1, deterministic=False, save_video=False):
+def sim_policy(variant, path_to_exp, num_trajs=1, deterministic=False, save_video=False, animated=False):
     '''
     simulate a trained policy adapting to a new task
     optionally save videos of the trajectories - requires ffmpeg
@@ -78,7 +78,7 @@ def sim_policy(variant, path_to_exp, num_trajs=1, deterministic=False, save_vide
         agent.clear_z()
         paths = []
         for n in range(num_trajs):
-            path = rollout(env, agent, max_path_length=variant['algo_params']['max_path_length'], accum_context=True, save_frames=save_video)
+            path = rollout(env, agent, max_path_length=variant['algo_params']['max_path_length'], accum_context=True, animated=animated, save_frames=save_video)
             paths.append(path)
             if save_video:
                 video_frames += [t['frame'] for t in path['env_infos']]
@@ -113,13 +113,14 @@ def sim_policy(variant, path_to_exp, num_trajs=1, deterministic=False, save_vide
 @click.option('--num_trajs', default=3)
 @click.option('--deterministic', is_flag=True, default=False)
 @click.option('--video', is_flag=True, default=False)
-def main(config, path, num_trajs, deterministic, video):
+@click.option('--animated', is_flag=True, default=False)
+def main(config, path, num_trajs, deterministic, video, animated):
     variant = default_config
     if config:
         with open(osp.join(config)) as f:
             exp_params = json.load(f)
         variant = deep_update_dict(exp_params, variant)
-    sim_policy(variant, path, num_trajs, deterministic, video)
+    sim_policy(variant, path, num_trajs, deterministic, video, animated)
 
 
 if __name__ == "__main__":

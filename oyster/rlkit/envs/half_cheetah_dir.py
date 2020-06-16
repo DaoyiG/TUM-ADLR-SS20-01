@@ -32,15 +32,28 @@ class HalfCheetahDirEnv(HalfCheetahEnv):
         super(HalfCheetahDirEnv, self).__init__()
 
     def step(self, action):
-        xposbefore = self.sim.data.qpos[0]
-        self.do_simulation(action, self.frame_skip)
-        xposafter = self.sim.data.qpos[0]
+        # xposbefore = self.sim.data.qpos[0]
+        # self.do_simulation(action, self.frame_skip)
+        # xposafter = self.sim.data.qpos[0]
+        #
+        # forward_vel = (xposafter - xposbefore) / self.dt
+        # forward_reward = self._goal_dir * forward_vel
+        # ctrl_cost = 0.5 * 1e-1 * np.sum(np.square(action))
+        #
+        # observation = self._get_obs()
+        # reward = forward_reward - ctrl_cost
+        # done = False
+        # infos = dict(reward_forward=forward_reward,
+        #     reward_ctrl=-ctrl_cost, task=self._task)
+        # return (observation, reward, done, infos)
+        xposbefore = self.get_pose_xyz[0]
+        observation, reward, done, _ = super(HalfCheetahDirEnv, self).step(action)
+        xposafter = self.get_pose_xyz[0]
 
-        forward_vel = (xposafter - xposbefore) / self.dt
+        forward_vel = (xposafter - xposbefore) / (1. / 240.)  # one step in bullet is 1/240 s #TODO: double check
         forward_reward = self._goal_dir * forward_vel
         ctrl_cost = 0.5 * 1e-1 * np.sum(np.square(action))
 
-        observation = self._get_obs()
         reward = forward_reward - ctrl_cost
         done = False
         infos = dict(reward_forward=forward_reward,
