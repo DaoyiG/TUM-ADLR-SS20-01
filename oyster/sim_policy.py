@@ -5,6 +5,7 @@ import json
 import numpy as np
 import click
 import torch
+import time
 
 from rlkit.envs import ENVS
 from rlkit.envs.wrappers import NormalizedBoxEnv, CameraWrapper
@@ -31,6 +32,8 @@ def sim_policy(variant, path_to_exp, num_trajs=1, deterministic=False, save_vide
 
     # create multi-task environment and sample tasks
     env = CameraWrapper(NormalizedBoxEnv(ENVS[variant['env_name']](**variant['env_params'])), variant['util_params']['gpu_id'])
+    if animated:
+        env.render()
     tasks = env.get_all_task_idx()
     obs_dim = int(np.prod(env.observation_space.shape))
     action_dim = int(np.prod(env.action_space.shape))

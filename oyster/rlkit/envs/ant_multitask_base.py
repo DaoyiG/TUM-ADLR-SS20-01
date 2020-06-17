@@ -2,7 +2,7 @@ import numpy as np
 
 #from rlkit.envs.ant import AntEnv
 #from gym.envs.mujoco.ant import AntEnv
-from pybulletgym.envs.roboschool.envs.locomotion.ant_env import AntBulletEnv as AntEnv
+from pybullet_envs.gym_locomotion_envs import AntBulletEnv as AntEnv
 
 class MultitaskAntEnv(AntEnv):
     def __init__(self, task={}, n_tasks=2, **kwargs):
@@ -16,11 +16,9 @@ class MultitaskAntEnv(AntEnv):
         xposbefore = self.sim.data.qpos[0]
         self.do_simulation(action, self.frame_skip)
         xposafter = self.sim.data.qpos[0]
-
         forward_vel = (xposafter - xposbefore) / self.dt
         forward_reward = -1.0 * abs(forward_vel - self._goal_vel)
         ctrl_cost = 0.5 * 1e-1 * np.sum(np.square(action))
-
         observation = self._get_obs()
         reward = forward_reward - ctrl_cost
         done = False
@@ -28,8 +26,6 @@ class MultitaskAntEnv(AntEnv):
                      reward_ctrl=-ctrl_cost, task=self._task)
         return (observation, reward, done, infos)
     """
-
-
     def get_all_task_idx(self):
         return range(len(self.tasks))
 
@@ -37,3 +33,7 @@ class MultitaskAntEnv(AntEnv):
         self._task = self.tasks[idx]
         self._goal = self._task['goal'] # assume parameterization of task by single vector
         self.reset()
+
+    def reset_model(self):
+        qpos = [0,0,0.45] + self.np_random.uniform(size=3, low=-.1, high=.1)
+        self.robot.robot_body.reset_position(qpos)
