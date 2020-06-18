@@ -70,8 +70,8 @@ def sim_policy(variant, path_to_exp, num_trajs=1, deterministic=False, save_vide
         agent = MakeDeterministic(agent)
 
     # load trained weights (otherwise simulate random policy)
-    context_encoder.load_state_dict(torch.load(os.path.join(path_to_exp, 'context_encoder.pth')))
-    policy.load_state_dict(torch.load(os.path.join(path_to_exp, 'policy.pth')))
+    context_encoder.load_state_dict(torch.load(os.path.join(path_to_exp, 'context_encoder.pth'), map_location=torch.device('cpu')))
+    policy.load_state_dict(torch.load(os.path.join(path_to_exp, 'policy.pth'), map_location=torch.device('cpu')))
 
     # loop through tasks collecting rollouts
     all_rets = []
@@ -81,7 +81,7 @@ def sim_policy(variant, path_to_exp, num_trajs=1, deterministic=False, save_vide
         agent.clear_z()
         paths = []
         for n in range(num_trajs):
-            path = rollout(env, agent, max_path_length=variant['algo_params']['max_path_length'], accum_context=True, animated=animated, save_frames=save_video)
+            path = rollout(env, agent, max_path_length=variant['algo_params']['num_steps_per_eval'], accum_context=True, animated=animated, save_frames=save_video)
             paths.append(path)
             if save_video:
                 video_frames += [t['frame'] for t in path['env_infos']]
