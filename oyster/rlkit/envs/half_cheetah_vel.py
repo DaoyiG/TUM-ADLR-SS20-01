@@ -3,7 +3,6 @@ import numpy as np
 from . import register_env
 from .half_cheetah import HalfCheetahEnv
 
-
 @register_env('cheetah-vel')
 class HalfCheetahVelEnv(HalfCheetahEnv):
     """Half-cheetah environment with target velocity, as described in [1]. The
@@ -30,21 +29,45 @@ class HalfCheetahVelEnv(HalfCheetahEnv):
         self._goal = self._goal_vel
         super(HalfCheetahVelEnv, self).__init__()
 
-    def step(self, action):
-        xposbefore = self.sim.data.qpos[0]
-        self.do_simulation(action, self.frame_skip)
-        xposafter = self.sim.data.qpos[0]
+    # TODO: step function with reward
+    # TODO: write _get_obs to get observations
 
-        forward_vel = (xposafter - xposbefore) / self.dt
+    # reference code from pearl
+    # def step(self, action):
+    #     xposbefore = self.sim.data.qpos[0]
+    #     self.do_simulation(action, self.frame_skip)
+    #     xposafter = self.sim.data.qpos[0]
+    #
+    #     forward_vel = (xposafter - xposbefore) / self.dt
+    #     forward_reward = -1.0 * abs(forward_vel - self._goal_vel)
+    #     ctrl_cost = 0.5 * 1e-1 * np.sum(np.square(action))
+    #
+    #     observation = self._get_obs()
+    #     reward = forward_reward - ctrl_cost
+    #     done = False
+    #     infos = dict(reward_forward=forward_reward,
+    #                  reward_ctrl=-ctrl_cost, task=self._task)
+    #     return (observation, reward, done, infos)
+    def step(self, action):
+        # get xposbefore
+        xposbefore = self.get_pose_xyz[0]
+        # Use original step function
+        observation, reward, done, _ = super(HalfCheetahVelEnv, self).step(action)
+        # get xpos after
+        xposafter = self.get_pose_xyz[0]
+
+        # TODO: how to return new dimension if use _get_obs()
+
+        # observation = self._get_obs()
+        forward_vel = (xposafter - xposbefore) / (1./240.)  # one step in bullet is 1/240 s #TODO: double check
         forward_reward = -1.0 * abs(forward_vel - self._goal_vel)
         ctrl_cost = 0.5 * 1e-1 * np.sum(np.square(action))
 
-        observation = self._get_obs()
         reward = forward_reward - ctrl_cost
         done = False
-        infos = dict(reward_forward=forward_reward,
-            reward_ctrl=-ctrl_cost, task=self._task)
+        infos = dict(reward_forward=forward_reward, reward_ctrl=-ctrl_cost, task=self._task)
         return (observation, reward, done, infos)
+
 
     def sample_tasks(self, num_tasks):
         np.random.seed(1337)

@@ -1,8 +1,7 @@
 import numpy as np
 
-#from rlkit.envs.ant import AntEnv
-#from gym.envs.mujoco.ant import AntEnv
-from pybulletgym.envs.roboschool.envs.locomotion.ant_env import AntBulletEnv as AntEnv
+from rlkit.envs.ant import AntEnv
+# from gym.envs.mujoco.ant import AntEnv
 
 class MultitaskAntEnv(AntEnv):
     def __init__(self, task={}, n_tasks=2, **kwargs):

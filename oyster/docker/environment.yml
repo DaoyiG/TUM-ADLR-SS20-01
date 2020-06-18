@@ -120,6 +120,7 @@ dependencies:
     - lxml==4.4.1
     - mistune==0.8.4
     - moviepy==1.0.0
+    - mujoco-py==1.50.1.63
     - nbconvert==5.4.0
     - nbformat==4.4.0
     - notebook==5.7.4
@@ -147,5 +148,5 @@ dependencies:
     - urllib3==1.24.1
     - webencodings==0.5.1
     - widgetsnbextension==3.4.2
-
+prefix: /home/rakelly/miniconda3/envs/pearl
 

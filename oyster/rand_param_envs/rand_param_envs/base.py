@@ -1,4 +1,5 @@
 from rand_param_envs.gym.core import Env
+from rand_param_envs.gym.envs.mujoco import MujocoEnv
 import numpy as np
 
 
@@ -46,7 +47,7 @@ class MetaEnv(Env):
         """
         pass
 
-class RandomEnv(MetaEnv):
+class RandomEnv(MetaEnv, MujocoEnv):
     """
     This class provides functionality for randomizing the physical parameters of a mujoco model
     The following parameters are changed:
@@ -58,7 +59,7 @@ class RandomEnv(MetaEnv):
     RAND_PARAMS_EXTENDED = RAND_PARAMS + ['geom_size']
 
     def __init__(self, log_scale_limit, file_name, *args, rand_params=RAND_PARAMS, **kwargs):
-        MetaEnv.__init__(self)
+        MujocoEnv.__init__(self, file_name, 4)
         assert set(rand_params) <= set(self.RAND_PARAMS_EXTENDED), \
             "rand_params must be a subset of " + str(self.RAND_PARAMS_EXTENDED)
         self.log_scale_limit = log_scale_limit            
