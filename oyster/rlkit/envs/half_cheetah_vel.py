@@ -22,11 +22,13 @@ class HalfCheetahVelEnv(HalfCheetahEnv):
         model-based control", 2012
         (https://homes.cs.washington.edu/~todorov/papers/TodorovIROS12.pdf)
     """
-    def __init__(self, task={}, n_tasks=2, randomize_tasks=True):
+    def __init__(self, task={}, n_tasks=2, randomize_tasks=True, observation_noise=0, action_noise=0):
         self._task = task
         self.tasks = self.sample_tasks(n_tasks)
         self._goal_vel = self.tasks[0].get('velocity', 0.0)
         self._goal = self._goal_vel
+        self._observation_noise = observation_noise
+        self._action_noise = action_noise
         super(HalfCheetahVelEnv, self).__init__()
 
     # TODO: step function with reward
@@ -49,10 +51,19 @@ class HalfCheetahVelEnv(HalfCheetahEnv):
     #                  reward_ctrl=-ctrl_cost, task=self._task)
     #     return (observation, reward, done, infos)
     def step(self, action):
+        # apply action noise
+        if self._action_noise >1e-8:
+            noise = self._action_noise * np.random.randn(self.action_space.shape[0])
+            action += noise
+
         # get xposbefore
         xposbefore = self.get_pose_xyz[0]
         # Use original step function
         observation, reward, done, _ = super(HalfCheetahVelEnv, self).step(action)
+        # apply observation noise
+        if self._observation_noise >1e-8:
+            noise = self._observation_noise * np.random.randn(self.observation_space.shape[0])
+            observation += noise
         # get xpos after
         xposafter = self.get_pose_xyz[0]
 

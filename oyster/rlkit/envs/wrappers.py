@@ -143,14 +143,15 @@ class CameraWrapper(object):
         )
 
     def initialize_camera(self):
-        # set camera parameters for viewing
-        sim = self.sim
-        viewer = mujoco_py.MjRenderContextOffscreen(sim)
-        camera = viewer.cam
-        camera.type = 1
-        camera.trackbodyid = 0
-        camera.elevation = -20
-        sim.add_render_context(viewer)
+        # # set camera parameters for viewing
+        # sim = self.sim
+        # viewer = mujoco_py.MjRenderContextOffscreen(sim)
+        # camera = viewer.cam
+        # camera.type = 1
+        # camera.trackbodyid = 0
+        # camera.elevation = -20
+        # sim.add_render_context(viewer)
+        pass
 
     def __getattr__(self, attrname):
         return getattr(self._wrapped_env, attrname)

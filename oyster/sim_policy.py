@@ -5,6 +5,7 @@ import json
 import numpy as np
 import click
 import torch
+import time
 
 from rlkit.envs import ENVS
 from rlkit.envs.wrappers import NormalizedBoxEnv, CameraWrapper
@@ -17,7 +18,7 @@ from rlkit.torch.sac.policies import MakeDeterministic
 from rlkit.samplers.util import rollout
 
 
-def sim_policy(variant, path_to_exp, num_trajs=1, deterministic=False, save_video=False):
+def sim_policy(variant, path_to_exp, num_trajs=1, deterministic=False, save_video=False, animated=False):
     '''
     simulate a trained policy adapting to a new task
     optionally save videos of the trajectories - requires ffmpeg
@@ -31,6 +32,8 @@ def sim_policy(variant, path_to_exp, num_trajs=1, deterministic=False, save_vide
 
     # create multi-task environment and sample tasks
     env = CameraWrapper(NormalizedBoxEnv(ENVS[variant['env_name']](**variant['env_params'])), variant['util_params']['gpu_id'])
+    if animated:
+        env.render()
     tasks = env.get_all_task_idx()
     obs_dim = int(np.prod(env.observation_space.shape))
     action_dim = int(np.prod(env.action_space.shape))
@@ -67,8 +70,8 @@ def sim_policy(variant, path_to_exp, num_trajs=1, deterministic=False, save_vide
         agent = MakeDeterministic(agent)
 
     # load trained weights (otherwise simulate random policy)
-    context_encoder.load_state_dict(torch.load(os.path.join(path_to_exp, 'context_encoder.pth')))
-    policy.load_state_dict(torch.load(os.path.join(path_to_exp, 'policy.pth')))
+    context_encoder.load_state_dict(torch.load(os.path.join(path_to_exp, 'context_encoder.pth'), map_location=torch.device('cpu')))
+    policy.load_state_dict(torch.load(os.path.join(path_to_exp, 'policy.pth'), map_location=torch.device('cpu')))
 
     # loop through tasks collecting rollouts
     all_rets = []
@@ -78,7 +81,7 @@ def sim_policy(variant, path_to_exp, num_trajs=1, deterministic=False, save_vide
         agent.clear_z()
         paths = []
         for n in range(num_trajs):
-            path = rollout(env, agent, max_path_length=variant['algo_params']['max_path_length'], accum_context=True, save_frames=save_video)
+            path = rollout(env, agent, max_path_length=variant['algo_params']['num_steps_per_eval'], accum_context=True, animated=animated, save_frames=save_video)
             paths.append(path)
             if save_video:
                 video_frames += [t['frame'] for t in path['env_infos']]
@@ -113,13 +116,14 @@ def sim_policy(variant, path_to_exp, num_trajs=1, deterministic=False, save_vide
 @click.option('--num_trajs', default=3)
 @click.option('--deterministic', is_flag=True, default=False)
 @click.option('--video', is_flag=True, default=False)
-def main(config, path, num_trajs, deterministic, video):
+@click.option('--animated', is_flag=True, default=False)
+def main(config, path, num_trajs, deterministic, video, animated):
     variant = default_config
     if config:
         with open(osp.join(config)) as f:
             exp_params = json.load(f)
         variant = deep_update_dict(exp_params, variant)
-    sim_policy(variant, path, num_trajs, deterministic, video)
+    sim_policy(variant, path, num_trajs, deterministic, video, animated)
 
 
 if __name__ == "__main__":

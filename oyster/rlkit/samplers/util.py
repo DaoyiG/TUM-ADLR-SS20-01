@@ -1,5 +1,5 @@
 import numpy as np
-
+import time
 
 def rollout(env, agent, max_path_length=np.inf, accum_context=True, animated=False, save_frames=False):
     """
@@ -30,12 +30,13 @@ def rollout(env, agent, max_path_length=np.inf, accum_context=True, animated=Fal
     terminals = []
     agent_infos = []
     env_infos = []
+    #if animated:
+    #    env.render()
     o = env.reset()
     next_o = None
     path_length = 0
 
-    if animated:
-        env.render()
+
     while path_length < max_path_length:
         a, agent_info = agent.get_action(o)
         next_o, r, d, env_info = env.step(a)
@@ -51,6 +52,7 @@ def rollout(env, agent, max_path_length=np.inf, accum_context=True, animated=Fal
         o = next_o
         if animated:
             env.render()
+            time.sleep(1./50.)
         if save_frames:
             from PIL import Image
             image = Image.fromarray(np.flipud(env.get_image()))
