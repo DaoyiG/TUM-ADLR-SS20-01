@@ -1,8 +1,4 @@
 #!/bin/bash
-UBUNTU_VERSION=16.04
-CUDA=11.0
-CUDNN=7.6.5.32-1
-
 sudo apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
