@@ -1,6 +1,6 @@
 import numpy as np
 
-from rlkit.envs.ant_multitask_base import MultitaskAntEnv
+from .ant_multitask_base import MultitaskAntEnv
 from . import register_env
 
 
@@ -23,7 +23,7 @@ class AntDirEnv(MultitaskAntEnv):
         if self._observation_noise > 1e-8:
             noise = self._observation_noise * np.random.randn(self.observation_space.shape[0])
             observation += noise
-            
+
         # torso_xyz_after = np.array(self.get_body_com("torso"))
         torso_xyz_after = self._get_obs()
 
