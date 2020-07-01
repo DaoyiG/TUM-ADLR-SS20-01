@@ -1,0 +1,22 @@
+{
+  "env_name": "ant-dir",
+  "n_train_tasks": 2,
+  "n_eval_tasks": 2,
+  "env_params": {
+    "n_tasks": 2,
+    "malfunction": "True"
+  },
+  "algo_params": {
+    "meta_batch": 4,
+    "num_initial_steps": 20,
+    "num_steps_prior": 4,
+    "num_steps_posterior": 0,
+    "num_extra_rl_steps_posterior": 6,
+    "num_train_steps_per_itr": 40,
+    "num_evals": 4,
+    "num_steps_per_eval": 6,
+    "num_exp_traj_eval": 2,
+    "embedding_batch_size": 128,
+    "embedding_mini_batch_size": 128
+  }
+}

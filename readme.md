@@ -1,7 +1,6 @@
 # Advanced Deep Learning for Robotics Project SS2020
 
-Project Topic:
-#### Investigating the feasibility of Off-Policy Meta-Reinforcement Learning via Probabilistic Context Variables in complex environments
+### Investigating the feasibility of Off-Policy Meta-Reinforcement Learning via Probabilistic Context Variables in complex environments
 
 ## Members:
 Daoyi Gao\

@@ -7,15 +7,19 @@ from . import register_env
 @register_env('ant-dir')
 class AntDirEnv(MultitaskAntEnv):
 
-    def __init__(self, task={}, n_tasks=2, forward_backward=False, randomize_tasks=True, observation_noise=0, **kwargs):
+    def __init__(self, task={}, n_tasks=2, forward_backward=False, randomize_tasks=True, observation_noise=0, malfunction=False, **kwargs):
         self.forward_backward = forward_backward
         self._observation_noise = observation_noise
+        self._malfunction = malfunction
+
         super(AntDirEnv, self).__init__(task, n_tasks, **kwargs)
 
     def step(self, action):
         # torso_xyz_before = np.array(self.get_body_com("torso"))
         torso_xyz_before = self._get_obs()
         direct = (np.cos(self._goal), np.sin(self._goal))
+        if self._malfunction:
+            action[:2] = 0
 
         # self.do_simulation(action, self.frame_skip)
         observation, reward, done, _ = super(AntDirEnv, self).step(action)
