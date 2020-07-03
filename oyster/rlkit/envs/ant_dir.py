@@ -19,7 +19,8 @@ class AntDirEnv(MultitaskAntEnv):
         torso_xyz_before = self._get_obs()
         direct = (np.cos(self._goal), np.sin(self._goal))
         if self._malfunction:
-            action[:2] = 0
+            mask = np.random.choice(2,8)
+            action *= mask
 
         # self.do_simulation(action, self.frame_skip)
         observation, reward, done, _ = super(AntDirEnv, self).step(action)
