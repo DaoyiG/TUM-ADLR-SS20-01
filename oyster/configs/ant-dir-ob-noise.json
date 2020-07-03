@@ -4,7 +4,7 @@
     "n_eval_tasks": 2,
     "env_params": {
         "n_tasks": 2,
-        "observation_noise":0.05
+        "observation_noise":0.02
     }
     ,
     "algo_params": {
