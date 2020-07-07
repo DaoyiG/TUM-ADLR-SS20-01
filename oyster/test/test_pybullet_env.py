@@ -2,9 +2,11 @@ import time
 import gym  # open ai gym
 import pybullet  
 import pybullet_envs  # register PyBullet enviroments with open ai gym
+from rlkit.envs import ENVS
 
 #env = gym.make('MinitaurBulletEnv-v0',render=True) 
 env = gym.make('AntBulletEnv-v0')
+env = ENVS['ant-dir'](malfunction=True)
 env.render()
 env.reset()  # should return a state vector if everything worked
 time.sleep(1)
