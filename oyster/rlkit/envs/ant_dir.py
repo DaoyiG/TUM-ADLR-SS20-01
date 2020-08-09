@@ -7,9 +7,11 @@ from . import register_env
 @register_env('ant-dir')
 class AntDirEnv(MultitaskAntEnv):
 
-    def __init__(self, task={}, n_tasks=2, forward_backward=False, randomize_tasks=True, observation_noise=0, malfunction=False, **kwargs):
+    def __init__(self, task={}, n_tasks=2, forward_backward=False, randomize_tasks=True, observation_noise=0,
+                 action_noise=0, malfunction=False, **kwargs):
         self.forward_backward = forward_backward
         self._observation_noise = observation_noise
+        self._action_noise = action_noise
         self._malfunction = malfunction
 
         super(AntDirEnv, self).__init__(task, n_tasks, **kwargs)
@@ -19,8 +21,12 @@ class AntDirEnv(MultitaskAntEnv):
         torso_xyz_before = self._get_obs()
         direct = (np.cos(self._goal), np.sin(self._goal))
         if self._malfunction:
-            mask = np.random.choice(2,8)
+            mal_leg = np.random.randint(0, 4)
+            mask = np.ones(8)
+            mask[2 * mal_leg] = 0
+            mask[2 * mal_leg + 1] = 0
             action *= mask
+            print(action)
 
         # self.do_simulation(action, self.frame_skip)
         observation, reward, done, _ = super(AntDirEnv, self).step(action)
@@ -28,6 +34,10 @@ class AntDirEnv(MultitaskAntEnv):
         if self._observation_noise > 1e-8:
             noise = self._observation_noise * np.random.randn(self.observation_space.shape[0])
             observation += noise
+
+        if self._action_noise > 1e-8:
+            noise = self._action_noise * np.random.randn(self.action_space.shape[0])
+            action += noise
 
         # torso_xyz_after = np.array(self.get_body_com("torso"))
         torso_xyz_after = self._get_obs()
@@ -67,7 +77,6 @@ class AntDirEnv(MultitaskAntEnv):
         return tasks
 
     def _get_obs(self):
-
         return np.concatenate([
             self.robot.robot_body.pose().xyz(),
             self.robot.robot_body.speed(),
