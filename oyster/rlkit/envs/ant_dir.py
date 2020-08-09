@@ -20,13 +20,18 @@ class AntDirEnv(MultitaskAntEnv):
         # torso_xyz_before = np.array(self.get_body_com("torso"))
         torso_xyz_before = self._get_obs()
         direct = (np.cos(self._goal), np.sin(self._goal))
+
         if self._malfunction:
             mal_leg = np.random.randint(0, 4)
             mask = np.ones(8)
             mask[2 * mal_leg] = 0
             mask[2 * mal_leg + 1] = 0
             action *= mask
-            print(action)
+            # print(action)
+
+        if self._action_noise > 1e-8:
+            noise = self._action_noise * np.random.randn(self.action_space.shape[0])
+            action += noise
 
         # self.do_simulation(action, self.frame_skip)
         observation, reward, done, _ = super(AntDirEnv, self).step(action)
@@ -34,10 +39,6 @@ class AntDirEnv(MultitaskAntEnv):
         if self._observation_noise > 1e-8:
             noise = self._observation_noise * np.random.randn(self.observation_space.shape[0])
             observation += noise
-
-        if self._action_noise > 1e-8:
-            noise = self._action_noise * np.random.randn(self.action_space.shape[0])
-            action += noise
 
         # torso_xyz_after = np.array(self.get_body_com("torso"))
         torso_xyz_after = self._get_obs()
