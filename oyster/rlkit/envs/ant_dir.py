@@ -8,7 +8,7 @@ from . import register_env
 class AntDirEnv(MultitaskAntEnv):
 
     def __init__(self, task={}, n_tasks=2, forward_backward=False, randomize_tasks=True, observation_noise=0,
-                 action_noise=0, malfunction=False, **kwargs):
+                 action_noise=0, malfunction=0, **kwargs):
         self.forward_backward = forward_backward
         self._observation_noise = observation_noise
         self._action_noise = action_noise
@@ -21,13 +21,14 @@ class AntDirEnv(MultitaskAntEnv):
         torso_xyz_before = self._get_obs()
         direct = (np.cos(self._goal), np.sin(self._goal))
 
-        if self._malfunction:
-            mal_leg = np.random.randint(0, 4)
-            mask = np.ones(8)
-            mask[2 * mal_leg] = 0
-            mask[2 * mal_leg + 1] = 0
-            action *= mask
-            # print(action)
+        if self._malfunction > 1e-8:
+            chance = np.random.rand(1)
+            if chance <= self._malfunction:
+                mal_leg = np.random.randint(0, 4)
+                mask = np.ones(8)
+                mask[2 * mal_leg] = 0
+                mask[2 * mal_leg + 1] = 0
+                action *= mask
 
         if self._action_noise > 1e-8:
             noise = self._action_noise * np.random.randn(self.action_space.shape[0])
