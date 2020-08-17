@@ -2,12 +2,12 @@ import gym  # open ai gym
 import pybullet as p
 import pybullet_envs  # register PyBullet enviroments with open ai gym
 
-env = gym.make('HalfCheetahBulletEnv-v0')
+env = gym.make('Walker2DBulletEnv-v0')
 # p is the pybullet package
 # important: must reset so that env has the true robot object!
 env.reset()
 # part can be either parts['torso'] or robot_body
-part = env.robot.parts['torso']
+# part = env.robot.parts['torso']
 part = env.robot.robot_body
 print("parts = ", part)
 bodyUniqueId = part.bodies[part.bodyIndex]

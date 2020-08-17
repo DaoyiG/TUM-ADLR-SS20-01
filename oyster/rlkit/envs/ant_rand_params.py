@@ -6,7 +6,7 @@ from .rand_params_base import RandParamsEnv
 
 from . import register_env
 
-@register_env('walker-rand-params')
+@register_env('ant-rand-params')
 class WalkerRandParamsEnv(Walker2DEnv):
     def __init__(self, n_tasks=2, randomize_tasks=True):
         super(WalkerRandParamsEnv, self).__init__()
@@ -32,7 +32,7 @@ class WalkerRandParamsEnv(Walker2DEnv):
                 Args:
                     task: task of the meta-learning environment
         """
-        # use pybullet API to change the attr
+        # TODO: use pybullet API to change the attr
         for param, param_val in task.items():
             # param_variable = getattr(self.model, param)
             # assert param_variable.shape == param_val.shape, 'shapes of new parameter value and old one must match'
@@ -40,7 +40,7 @@ class WalkerRandParamsEnv(Walker2DEnv):
             part = self.robot.robot_body
             bodyUniqueId = part.bodies[part.bodyIndex]
             partIndex = part.bodyPartIndex
-            p.changeDynamics(bodyUniqueId, partIndex, **{param: param_val})
+            p.changeDynamics(bodyUniqueId, partIndex, param=param_val)
         self.cur_params = task
 
     def sample_tasks(self, num_tasks):
@@ -63,14 +63,14 @@ class WalkerRandParamsEnv(Walker2DEnv):
         bodyUniqueId = part.bodies[part.bodyIndex]
         partIndex = part.bodyPartIndex
         info = p.getDynamicsInfo(bodyUniqueId, partIndex)
-        original_mass = info[0]
+        mass = info[0]
 
         tasks = []
         for _ in range(num_tasks):
             tasks_params = {}
 
             # "additive noise" to the original parameters
-            mass = original_mass + np.random.uniform(0.0, 3.0)
+            mass += np.random.uniform(0.0, 3.0)
             # body_inertia += np.random.uniform(0.0, 3.0)
             # dof_damping = +np.random.uniform(0.0, 3.0)
             # geom_friction += np.random.uniform(0.0, 3.0)
