@@ -4,7 +4,7 @@
   "n_eval_tasks": 2,
   "env_params": {
     "n_tasks": 2,
-    "malfunction": 0.1
+    "malfunction": 0.5
   },
   "algo_params": {
     "meta_batch": 4,

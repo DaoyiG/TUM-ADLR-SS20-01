@@ -116,7 +116,7 @@ def sim_policy(variant, path_to_exp, num_trajs=1, deterministic=False, save_vide
 @click.option('--num_trajs', default=3)
 @click.option('--deterministic', is_flag=True, default=False)
 @click.option('--video', is_flag=True, default=False)
-@click.option('--animated', is_flag=True, default=False)
+@click.option('--animated', is_flag=True, default=True)
 def main(config, path, num_trajs, deterministic, video, animated):
     variant = default_config
     if config:

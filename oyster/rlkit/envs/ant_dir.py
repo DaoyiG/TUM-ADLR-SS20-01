@@ -21,15 +21,16 @@ class AntDirEnv(MultitaskAntEnv):
         torso_xyz_before = self._get_obs()
         direct = (np.cos(self._goal), np.sin(self._goal))
 
-        if self._malfunction > 1e-8:
-            chance = np.random.rand(1)
-            if chance <= self._malfunction:
-                mal_leg = np.random.randint(0, 4)
-                mask = np.ones(8)
-                mask[2 * mal_leg] = 0
-                mask[2 * mal_leg + 1] = 0
-                action *= mask
-
+        # if self._malfunction > 1e-8:
+        #     chance = np.random.rand(1)
+        #     if chance <= self._malfunction:
+        #         mal_leg = np.random.randint(0, 4)
+        #         mask = np.ones(8)
+        #         mask[2 * mal_leg] = 0
+        #         mask[2 * mal_leg + 1] = 0
+        #         action *= mask
+        action *= self._task['mal']
+        print(action)
         if self._action_noise > 1e-8:
             noise = self._action_noise * np.random.randn(self.action_space.shape[0])
             action += noise
@@ -76,6 +77,21 @@ class AntDirEnv(MultitaskAntEnv):
         else:
             velocities = np.random.uniform(0., 2.0 * np.pi, size=(num_tasks,))
         tasks = [{'goal': velocity} for velocity in velocities]
+
+        for n in range(num_tasks):
+            if self._malfunction > 1e-8:
+                chance = np.random.rand(1)
+                if chance <= self._malfunction:
+                    mal_leg = np.random.randint(0, 4)
+                    mask = np.ones(8)
+                    mask[2 * mal_leg] = 0
+                    mask[2 * mal_leg + 1] = 0
+                    tasks[n]['mal'] = mask
+                else:
+                    tasks[n]['mal'] = np.ones(8)
+        print(tasks)
+
+
         return tasks
 
     def _get_obs(self):
