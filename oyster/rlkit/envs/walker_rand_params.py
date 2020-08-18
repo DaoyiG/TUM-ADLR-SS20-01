@@ -64,6 +64,9 @@ class WalkerRandParamsEnv(Walker2DEnv):
         partIndex = part.bodyPartIndex
         info = p.getDynamicsInfo(bodyUniqueId, partIndex)
         original_mass = info[0]
+        original_lateral_friction = info[1]
+        original_body_inertia = info[2]
+        original_contact_damping = info[-4]
 
         tasks = []
         for _ in range(num_tasks):
@@ -71,13 +74,13 @@ class WalkerRandParamsEnv(Walker2DEnv):
 
             # "additive noise" to the original parameters
             mass = original_mass + np.random.uniform(0.0, 3.0)
-            # body_inertia += np.random.uniform(0.0, 3.0)
-            # dof_damping = +np.random.uniform(0.0, 3.0)
-            # geom_friction += np.random.uniform(0.0, 3.0)
+            lateral_friction = original_lateral_friction * np.random.uniform(0.8, 1.2)
+            # localInertiaDiagnoal = original_body_inertia * np.random.uniform(0.8, 1.2, 3)
+            contact_damping = original_contact_damping * np.random.uniform(0.8, 1.2)
             tasks_params['mass'] = mass
-            # tasks_params['body_inertia'] = body_inertia
-            # tasks_params['dof_damping'] = dof_damping
-            # tasks_params['geom_friction'] = geom_friction
+            tasks_params['lateralFriction'] = lateral_friction
+            # tasks_params['localInertiaDiagnoal'] = localInertiaDiagnoal
+            tasks_params['contactDamping'] = contact_damping
             tasks.append(tasks_params)
 
         return tasks

@@ -1,5 +1,5 @@
 import numpy as np
-from pybullet_envs.gym_locomotion_envs import Walker2DBulletEnv as Walker2DEnv
+from pybullet_envs.gym_locomotion_envs import AntBulletEnv as AntEnv
 import pybullet as p
 
 from .rand_params_base import RandParamsEnv
@@ -7,7 +7,7 @@ from .rand_params_base import RandParamsEnv
 from . import register_env
 
 @register_env('ant-rand-params')
-class WalkerRandParamsEnv(Walker2DEnv):
+class WalkerRandParamsEnv(AntEnv):
     def __init__(self, n_tasks=2, randomize_tasks=True):
         super(WalkerRandParamsEnv, self).__init__()
         self.reset()
@@ -32,7 +32,7 @@ class WalkerRandParamsEnv(Walker2DEnv):
                 Args:
                     task: task of the meta-learning environment
         """
-        # TODO: use pybullet API to change the attr
+        # use pybullet API to change the attr
         for param, param_val in task.items():
             # param_variable = getattr(self.model, param)
             # assert param_variable.shape == param_val.shape, 'shapes of new parameter value and old one must match'
@@ -40,7 +40,7 @@ class WalkerRandParamsEnv(Walker2DEnv):
             part = self.robot.robot_body
             bodyUniqueId = part.bodies[part.bodyIndex]
             partIndex = part.bodyPartIndex
-            p.changeDynamics(bodyUniqueId, partIndex, param=param_val)
+            p.changeDynamics(bodyUniqueId, partIndex, **{param: param_val})
         self.cur_params = task
 
     def sample_tasks(self, num_tasks):
@@ -63,21 +63,24 @@ class WalkerRandParamsEnv(Walker2DEnv):
         bodyUniqueId = part.bodies[part.bodyIndex]
         partIndex = part.bodyPartIndex
         info = p.getDynamicsInfo(bodyUniqueId, partIndex)
-        mass = info[0]
+        original_mass = info[0]
+        original_lateral_friction = info[1]
+        original_body_inertia = info[2]
+        original_contact_damping = info[-4]
 
         tasks = []
         for _ in range(num_tasks):
             tasks_params = {}
 
             # "additive noise" to the original parameters
-            mass += np.random.uniform(0.0, 3.0)
-            # body_inertia += np.random.uniform(0.0, 3.0)
-            # dof_damping = +np.random.uniform(0.0, 3.0)
-            # geom_friction += np.random.uniform(0.0, 3.0)
+            mass = original_mass + np.random.uniform(0.0, 3.0)
+            lateral_friction = original_lateral_friction * np.random.uniform(0.8, 1.2)
+            # localInertiaDiagnoal = original_body_inertia * np.random.uniform(0.8, 1.2, 3)
+            contact_damping = original_contact_damping * np.random.uniform(0.8, 1.2)
             tasks_params['mass'] = mass
-            # tasks_params['body_inertia'] = body_inertia
-            # tasks_params['dof_damping'] = dof_damping
-            # tasks_params['geom_friction'] = geom_friction
+            tasks_params['lateralFriction'] = lateral_friction
+            # tasks_params['localInertiaDiagnoal'] = localInertiaDiagnoal
+            tasks_params['contactDamping'] = contact_damping
             tasks.append(tasks_params)
 
         return tasks
