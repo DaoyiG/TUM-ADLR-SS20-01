@@ -12,8 +12,9 @@ This course project is base on the paper below:\
 The experiments codebase is transformed from Mujoco into Pybullet.  
 
 ## Related Sources
+Visualizing reward curves
 [Viskit](https://github.com/vitchyr/viskit)\
-Visualizing reward kurves
+
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
