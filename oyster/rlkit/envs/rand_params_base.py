@@ -1,18 +1,10 @@
 import numpy as np
-# from rand_param_envs.walker2d_rand_params import Walker2DRandParamsEnv
 
-from . import register_env
-# from pybulletgym.envs.roboschool.envs.locomotion.walker2d_env import Walker2DBulletEnv as Walker2DRandParamsEnv
-# from pybulletgym.envs.mujoco.envs.locomotion.walker2d_env import Walker2DMuJoCoEnv as Walker2DRandParamsEnv
-from pybullet_envs.gym_locomotion_envs import Walker2DBulletEnv as Walker2DRandParamsEnv
-
-@register_env('walker-rand-params')
-class WalkerRandParamsWrappedEnv(Walker2DRandParamsEnv):
-    # def __init__(self, n_tasks=2, randomize_tasks=True):
-    #     super(WalkerRandParamsWrappedEnv, self).__init__()
-    #     self.tasks = self.sample_tasks(n_tasks)
-    #     self.rand_params = ['body_mass', 'dof_damping', 'body_inertia', 'geom_friction']
-    #     self.reset_task(0)
+class RandParamsEnv():
+    def __init__(self, n_tasks=100, randomize_tasks=True):
+        self.tasks = self.sample_tasks(n_tasks)
+        self.rand_params = ['body_mass', 'dof_damping', 'body_inertia', 'geom_friction']
+        self.reset_task(0)
 
     def get_all_task_idx(self):
         return range(len(self.tasks))
@@ -30,7 +22,7 @@ class WalkerRandParamsWrappedEnv(Walker2DRandParamsEnv):
                 Args:
                     task: task of the meta-learning environment
         """
-
+        # TODO: use pybullet API to change the attr
         # for param, param_val in task.items():
         #     param_variable = getattr(self.model, param)
         #     assert param_variable.shape == param_val.shape, 'shapes of new parameter value and old one must match'
@@ -51,13 +43,12 @@ class WalkerRandParamsWrappedEnv(Walker2DRandParamsEnv):
         # body_inertia
         # dof_damping -> different multiplier for different dofs/joints
         # geom_friction -> friction at the body components
-        np.random.seed(1337)
 
         tasks = []
         for _ in range(num_tasks):
             tasks_params = {}
 
-            # TODO: values need to be tuned
+            # TODO: this should act like "additive noise" to the original parameters
             mass = np.random.uniform(0.0, 3.0)
             body_inertia = np.random.uniform(0.0, 3.0)
             dof_damping = np.random.uniform(0.0, 3.0)
@@ -102,23 +93,21 @@ class WalkerRandParamsWrappedEnv(Walker2DRandParamsEnv):
     #         param_sets.append(new_params)
     #
     #     return param_sets
-    def save_parameters(self):
-        pass
 
-    # def save_parameters(self):
-    #     self.init_params = {}
-    #     if 'body_mass' in self.rand_params:
-    #         self.init_params['body_mass'] = self.model.body_mass
-    #
-    #     # body_inertia
-    #     if 'body_inertia' in self.rand_params:
-    #         self.init_params['body_inertia'] = self.model.body_inertia
-    #
-    #     # damping -> different multiplier for different dofs/joints
-    #     if 'dof_damping' in self.rand_params:
-    #         self.init_params['dof_damping'] = self.model.dof_damping
-    #
-    #     # friction at the body components
-    #     if 'geom_friction' in self.rand_params:
-    #         self.init_params['geom_friction'] = self.model.geom_friction
-    #     self.cur_params = self.init_params
+    def save_parameters(self):
+        self.init_params = {}
+        if 'body_mass' in self.rand_params:
+            self.init_params['body_mass'] = self.model.body_mass
+
+        # body_inertia
+        if 'body_inertia' in self.rand_params:
+            self.init_params['body_inertia'] = self.model.body_inertia
+
+        # damping -> different multiplier for different dofs/joints
+        if 'dof_damping' in self.rand_params:
+            self.init_params['dof_damping'] = self.model.dof_damping
+
+        # friction at the body components
+        if 'geom_friction' in self.rand_params:
+            self.init_params['geom_friction'] = self.model.geom_friction
+        self.cur_params = self.init_params
